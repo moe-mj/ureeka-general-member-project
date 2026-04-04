@@ -13,8 +13,6 @@ function App() {
         Testing
         mojo
         acel
-        steven widinata
-        zeda
       </p>
     </>
   )
