@@ -2,9 +2,13 @@
   "name": "ureeka-general-member",
   "version": "1.0.0",
   "main": "index.js",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"npm run dev --prefix frontend\" \"npm run start:dev --prefix backend\""
+    "dev": "concurrently \"npm run dev --workspace=frontend\" \"npm run start:dev --workspace=backend\""
   },
   "repository": {
     "type": "git",
@@ -17,5 +21,18 @@
     "url": "https://github.com/moe-mj/ureeka-general-member-project/issues"
   },
   "homepage": "https://github.com/moe-mj/ureeka-general-member-project#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.1"
+  },
+  "dependencies": {},
+  "overrides": {
+    "lodash": "^4.18.1",
+    "path-to-regexp": "^8.4.0",
+    "picomatch": "^4.0.4"
+  }
 }
