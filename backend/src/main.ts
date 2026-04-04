@@ -9,6 +9,7 @@ async function bootstrap() {
     .setTitle('Ureeka-Project-API')
     .setDescription('The APIs used in this project')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -16,6 +17,7 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
 }
+
 bootstrap().catch((err) => {
   console.error('Error starting application: ', err);
   process.exit(1);
