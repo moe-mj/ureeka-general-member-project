@@ -14,6 +14,7 @@ function App() {
         mojo
         acel
         steven widinata
+        zeda
       </p>
     </>
   )
