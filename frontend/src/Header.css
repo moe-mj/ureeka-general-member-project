@@ -1,0 +1,63 @@
+/* Header.css */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Bayangan halus di bawah header */
+}
+
+.fancy-header {
+  display: flex;
+  justify-content: space-between; /* Logo kiri, Navigasi kanan */
+  align-items: center;
+  padding: 15px 8%;
+  background: rgba(255, 255, 255, 0.9); /* Background putih transparan */
+  backdrop-filter: blur(10px); /* Efek 'Kaca Buram' modern */
+}
+
+.logo-area {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -1px; /* Jarak antar huruf dirapatkan agar modern */
+}
+
+.logo-main {
+  color: var(--secondary-color);
+}
+
+.logo-dot {
+  color: var(--primary-color);
+}
+
+.nav-navigation {
+  display: flex;
+  align-items: center;
+  gap: 30px; /* Jarak antar item navigasi */
+}
+
+.nav-item {
+  text-decoration: none;
+  color: var(--text-dark);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-item:hover, .nav-item.active {
+  color: var(--primary-color);
+}
+
+.upgrade-btn {
+  background: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 10px 24px;
+  border-radius: 25px; /* Tombol melengkung (pill-shaped) */
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.upgrade-btn:hover {
+  background-color: #6d28d9; /* Warna primary sedikit lebih gelap saat dihover */
+  transform: translateY(-2px); /* Tombol sedikit terangkat saat dihover */
+}

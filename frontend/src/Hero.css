@@ -1,0 +1,91 @@
+/* Hero.css */
+.hero-edu-container {
+  padding: 80px 8% 40px;
+}
+
+.hero-edu-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr; /* 2 Kolom: Kolom teks lebih lebar dari kolom grafik */
+  gap: 50px;
+  align-items: center;
+}
+
+.badge-ai {
+  background-color: #ede9fe; /* Warna primary super muda */
+  color: var(--primary-color);
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.hero-edu-text h1 {
+  font-size: 3.2rem;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+.hero-edu-text h1 span {
+  color: var(--primary-color);
+}
+
+.hero-edu-text p {
+  color: var(--text-dark);
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.hero-edu-actions {
+  display: flex;
+  gap: 20px;
+}
+
+.btn-start-learning {
+  background-color: var(--secondary-color);
+  color: var(--white);
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.3s;
+}
+
+.btn-view-path {
+  background: none;
+  border: 2px solid var(--secondary-color);
+  color: var(--secondary-color);
+  padding: 12px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-view-path:hover {
+  background-color: var(--secondary-color);
+  color: var(--white);
+}
+
+.btn-start-learning:hover {
+  opacity: 0.9;
+}
+
+/* Placeholder grafik AI Tutor berbentuk lingkaran yang menyala */
+.hero-edu-graphic-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ai-brain-icon {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  box-shadow: 0 0 40px var(--primary-color);
+  opacity: 0.8;
+}
