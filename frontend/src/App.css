@@ -1,18 +1,16 @@
-/* App.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 
-/* Variabel Warna - Biar gampang ganti tema nanti */
+
 :root {
-  --primary-color: #7c3aed; /* Ungu Neon (High-Tech) */
-  --secondary-color: #0f172a; /* Biru Navy (Profesional) */
-  --bg-color: #f8fafc; /* Abu-abu sangat muda (Bersih) */
+  --primary-color: #7c3aed; 
+  --secondary-color: #0f172a; 
+  --bg-color: #f8fafc; 
   --text-dark: #334155;
   --text-light: #94a3b8;
   --white: #ffffff;
-  font-family: 'Poppins', sans-serif; /* Menggunakan Font Poppins agar modern */
+  font-family: 'Poppins', sans-serif; 
 }
 
-/* Reset CSS agar tidak ada margin default yang aneh */
 * {
   margin: 0;
   padding: 0;
@@ -27,12 +25,12 @@ body {
 .app-layout {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Memastikan website setinggi layar HP/Laptop */
+  min-height: 100vh; 
 }
 
 .main-content {
-  flex-grow: 1; /* Membuat area tengah (Hero+Dashboard) mengambil sisa ruang */
-  padding-bottom: 50px; /* Jarak agar tidak terlalu mepet footer */
+  flex-grow: 1; 
+  padding-bottom: 50px; 
 }
 
 h1, h2, h3 {

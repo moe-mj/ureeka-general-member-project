@@ -1,5 +1,4 @@
-// Footer.tsx
-import './App.css'; // Menggunakan gaya default di App.css saja
+import '../../App.css'
 
 function Footer() {
   return (

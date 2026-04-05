@@ -1,4 +1,3 @@
-// Hero.tsx
 import './Hero.css';
 
 function Hero() {
@@ -15,7 +14,6 @@ function Hero() {
           </div>
         </div>
         <div className="hero-edu-graphic-placeholder">
-          {/* Ini simulasi grafik AI Tutor. Di proyek nyata, ini bisa berupa gambar atau animasi */}
           <div className="ai-brain-icon"></div>
         </div>
       </div>

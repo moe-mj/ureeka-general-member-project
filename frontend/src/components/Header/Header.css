@@ -1,24 +1,23 @@
-/* Header.css */
 .sticky-header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Bayangan halus di bawah header */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
 }
 
 .fancy-header {
   display: flex;
-  justify-content: space-between; /* Logo kiri, Navigasi kanan */
+  justify-content: space-between; 
   align-items: center;
   padding: 15px 8%;
-  background: rgba(255, 255, 255, 0.9); /* Background putih transparan */
-  backdrop-filter: blur(10px); /* Efek 'Kaca Buram' modern */
+  background: rgba(255, 255, 255, 0.9); 
+  backdrop-filter: blur(10px); 
 }
 
 .logo-area {
   font-size: 1.6rem;
   font-weight: 700;
-  letter-spacing: -1px; /* Jarak antar huruf dirapatkan agar modern */
+  letter-spacing: -1px; 
 }
 
 .logo-main {
@@ -32,7 +31,7 @@
 .nav-navigation {
   display: flex;
   align-items: center;
-  gap: 30px; /* Jarak antar item navigasi */
+  gap: 30px; 
 }
 
 .nav-item {
@@ -51,13 +50,13 @@
   color: var(--white);
   border: none;
   padding: 10px 24px;
-  border-radius: 25px; /* Tombol melengkung (pill-shaped) */
+  border-radius: 25px; 
   cursor: pointer;
   font-weight: 600;
   transition: transform 0.2s, background-color 0.2s;
 }
 
 .upgrade-btn:hover {
-  background-color: #6d28d9; /* Warna primary sedikit lebih gelap saat dihover */
-  transform: translateY(-2px); /* Tombol sedikit terangkat saat dihover */
+  background-color: #6d28d9; 
+  transform: translateY(-2px); 
 }

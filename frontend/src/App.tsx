@@ -1,22 +1,20 @@
-
-import Header from './Header'
-import Hero from './Hero'
-import DashBoard from './DashBoard'
-import Footer from './Footer'
-import './App.css'
+import { Outlet } from "react-router-dom";
+import Header from "./components/Header/Header";
+import Hero from "./Hero";
+import Footer from "./components/Footer/Footer";
+import "./App.css";
 
 function App() {
   return (
-    // 'app-layout' adalah container utama yang mengatur posisi Header di atas, Dashboard di tengah, Footer di bawah.
     <div className="app-layout">
       <Header />
       <main className="main-content">
         <Hero />
-        <DashBoard />
+        <Outlet />  
       </main>
       <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
