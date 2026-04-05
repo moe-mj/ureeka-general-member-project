@@ -59,4 +59,9 @@ export class AuthService {
     const { password: _, ...userFinal } = user;
     return { message: 'Login successful', userFinal, accessToken };
   }
+
+  async getUser(userId: number) {
+    const id = userId;
+    return this.prisma.user.findUnique({ where: { id } });
+  }
 }
