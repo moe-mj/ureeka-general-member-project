@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 const MOCK_COURSES = [
-  { id: 1, title: 'Matematika', lesson: 'Aljabar Linear', status: 65, image: 'https://thumbs.dreamstime.com/b/abstract-mathematic-logo-vector-icon-abstract-mathematic-logo-vector-icon-suitable-business-education-math-symbol-276165936.jpg' },
+  { id: 1, title: 'Matematika', lesson: 'Kalkulus', status: 65, image: 'https://thumbs.dreamstime.com/b/abstract-mathematic-logo-vector-icon-abstract-mathematic-logo-vector-icon-suitable-business-education-math-symbol-276165936.jpg' },
   { id: 2, title: 'Fisika', lesson: 'Termodinamika', status: 30,image: 'https://img.freepik.com/vektor-premium/web-logo-fisika-logo-objek-sekolah_627820-42.jpg'},
   { id: 3, title: 'Bahasa Inggris', lesson: 'Present Tense', status: 90,image: 'https://media.istockphoto.com/id/1306202376/id/vektor/logo-atau-ikon-vektor-dengan-big-ben-untuk-belajar-bahasa-inggris.jpg?s=1024x1024&w=is&k=20&c=Nyx7IXO0foF8LKcMHLE8eSUGCEj2Gwpv8M8BOydk9ZY='},
 ];

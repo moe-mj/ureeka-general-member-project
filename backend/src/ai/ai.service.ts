@@ -15,12 +15,11 @@ export class AiService {
     }
     this.ai = new GoogleGenerativeAI(apiKey);
     this.model = this.ai.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash-lite',
     });
   }
   async getResponse(data: AskDto) {
     const { prompt, moduleId } = data;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const moduleData = (await this.prisma.module.findUnique({
       where: { id: moduleId },
       select: { content: true },

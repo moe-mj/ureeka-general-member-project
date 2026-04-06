@@ -7,7 +7,7 @@ import { LearningModule } from './learning/learning.module';
 import { AiModule } from './ai/ai.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, LearningModule],
+  imports: [PrismaModule, AuthModule, LearningModule, AiModule],
   controllers: [AppController],
   providers: [AppService],
 })
