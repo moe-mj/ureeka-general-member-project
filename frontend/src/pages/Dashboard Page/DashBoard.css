@@ -1,117 +1,171 @@
 /* Dashboard.css */
-.dashboard-courses-area {
-  padding: 0 8%;
+:root {
+  --primary-accent: #8b5cf6;
+  --bg-dark: #0f172a;
+  --card-bg: #1e293b;
+  --text-main: #f8fafc;
+  --text-dim: #94a3b8;
+  --card-border: rgba(255, 255, 255, 0.08);
 }
 
-.dashboard-courses-header {
+.dashboard-wrapper {
+  background-color: var(--bg-dark);
+  min-height: 100vh;
+  color: var(--text-main);
+  padding: 40px 8%;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* 1) Logout in Upper Right Fix */
+.dashboard-header {
   display: flex;
-  justify-content: space-between; /* Judul kiri, View All kanan */
-  align-items: center;
-  margin-bottom: 30px;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 60px;
 }
 
-.dashboard-courses-header h2 {
-  font-size: 1.6rem;
+.header-content h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
 }
 
-.view-all-link {
-  color: var(--primary-color);
-  text-decoration: none;
+.subtitle {
+  color: var(--text-dim);
+  font-size: 1rem;
+}
+
+.logout-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
   font-weight: 500;
+  transition: all 0.2s;
 }
 
-.view-all-link:hover {
-  text-decoration: underline;
+.logout-btn:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  transform: translateY(-2px);
 }
 
-/* Menggunakan CSS Grid untuk menata Kartu Materi */
+/* 2) Grid and Card Spacing */
 .courses-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 Kolom sama rata */
-  gap: 30px; /* Jarak antar kartu */
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 32px;
+  margin-bottom: 60px;
 }
 
 .course-card {
-  background-color: var(--white);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03); /* Bayangan kartu halus */
-  transition: transform 0.3s, box-shadow 0.3s;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: all 0.3s ease;
 }
 
 .course-card:hover {
-  transform: translateY(-5px); /* Kartu naik saat dihover */
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05); /* Bayangan lebih kuat saat dihover */
+  transform: translateY(-10px);
+  border-color: var(--primary-accent);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-/* Aksen border di bagian atas kartu untuk membedakan kategori */
-.card-purple-border { border-top: 4px solid var(--primary-color); }
-.card-teal-border { border-top: 4px solid #06B6D4; } /* Warna Teal modern */
-.card-amber-border { border-top: 4px solid #F59E0B; } /* Warna Amber/Oranye modern */
+.course-card-top {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
 
-/* Placeholder icon berbentuk kotak warna super muda */
 .course-card-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  width: 48px;
+  height: 48px;
+  background: var(--primary-accent);
+  border-radius: 14px;
+  flex-shrink: 0;
 }
 
-.math-icon { background-color: #ede9fe; }
-.physics-icon { background-color: #ecfeff; }
-.programming-icon { background-color: #fffbeb; }
-
-.course-card h3 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
+.course-info h3 {
+  font-size: 1.3rem;
+  margin: 0 0 4px 0;
 }
 
-.course-card p {
-  color: var(--text-dark);
-  font-size: 0.95rem;
-  margin-bottom: 20px;
-  line-height: 1.5;
+.course-info p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin: 0;
 }
 
-/* Gaya Progress Bar modern berbentuk garis */
-.course-progress-bar {
+.course-info span {
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+/* Progress Styling */
+.progress-section {
   width: 100%;
-  height: 8px;
-  background-color: #e2e8f0; /* Background bar abu-abu */
-  border-radius: 4px;
-  margin-bottom: 8px;
-  overflow: hidden; /* Memastikan isian tidak keluar dari bar */
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+  color: var(--text-dim);
+}
+
+.status-text {
+  color: var(--primary-accent);
+  font-weight: bold;
+}
+
+.course-progress-bar {
+  background: rgba(255, 255, 255, 0.1);
+  height: 10px;
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .progress-fill {
+  background: linear-gradient(90deg, var(--primary-accent), #a78bfa);
   height: 100%;
-  background-color: var(--primary-color); /* Isian warna ungu default */
-  border-radius: 4px;
-}
-
-.progress-fill.teal-fill { background-color: #06B6D4; } /* Isian warna teal khusus */
-.progress-fill.amber-fill { background-color: #F59E0B; } /* Isian warna amber khusus */
-
-.course-status {
-  color: var(--text-light);
-  font-size: 0.85rem;
-  display: block;
-  margin-bottom: 25px;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
 }
 
 .btn-course-continue {
-  width: 100%;
-  background: none;
-  border: 2px solid var(--primary-color);
-  color: var(--primary-color);
-  padding: 10px 0;
-  border-radius: 8px;
-  cursor: pointer;
+  background: var(--primary-accent);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
   font-weight: 600;
-  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 10px;
 }
 
 .btn-course-continue:hover {
-  background-color: var(--primary-color);
-  color: var(--white);
+  opacity: 0.9;
+}
+
+.dashboard-footer {
+  text-align: center;
+}
+
+.view-all-link {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.view-all-link:hover {
+  color: var(--primary-accent);
 }

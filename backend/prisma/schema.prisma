@@ -21,3 +21,27 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  modules     Module[]
+  createdAt   DateTime @default(now())
+}
+
+model Module {
+  id       String @id @default(uuid())
+  title    String
+  content   String
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+  order    Int
+}
+
+model UserProgress {
+  id          String  @id @default(uuid())
+  userId      String
+  moduleId    String
+  isCompleted Boolean @default(false)
+}
