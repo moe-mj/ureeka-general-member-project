@@ -1,16 +1,17 @@
-import React from 'react';
-
 interface CardProps {
   title: string;
   lesson: string;
   status: number;
+  image: string;
 }
 
-function Card({ title, lesson, status }: CardProps) {
+function Card({ title, lesson, status, image }: CardProps) {
   return (
     <div className="course-card">
       <div className="course-card-top">
-        <div className="course-card-icon"></div>
+        <div className="course-card-icon">
+            <img src={image} alt="" />
+        </div>
         <div className="course-info">
           <h3>{title}</h3>
           <p>Materi hari ini: <span>{lesson}</span></p>
