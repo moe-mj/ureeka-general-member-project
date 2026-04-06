@@ -41,10 +41,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const register = async (name: string, email: string, password: string) => {
     try {
-      const response = await api.post('/api/auth/register', { name, email, password });
-      const { token, user: userData } = response.data;
-      localStorage.setItem('token', token);
-      setUser(userData);
+      await api.post('/api/auth/register', { name, email, password });
     } catch (error: any) {
       const message = error.response?.data?.message || 'Registration failed';
       throw new Error(message);
