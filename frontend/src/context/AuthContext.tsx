@@ -1,13 +1,10 @@
 import React, { createContext, useState, useContext, useEffect, type ReactNode } from 'react';
+import api from '../services/api';
 
 interface User {
   id: string;
   name: string;
   email: string;
-}
-
-interface StoredUser extends User {
-  password: string;
 }
 
 interface AuthContextType {
@@ -20,76 +17,68 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    api.get('/api/auth/user')
+      .then(response => {
+        setUser(response.data);
+      })
+      .catch(() => {
+        localStorage.removeItem('token');
+        setUser(null);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const register = async (name: string, email: string, password: string) => {
+    try {
+      const response = await api.post('/api/auth/register', { name, email, password });
+      const { token, user: userData } = response.data;
+      localStorage.setItem('token', token);
+      setUser(userData);
+    } catch (error: any) {
+      const message = error.response?.data?.message || 'Registration failed';
+      throw new Error(message);
+    }
+  };
+
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await api.post('/api/auth/login', { email, password });
+      const { accessToken, userFinal } = response.data;
+      if (accessToken) {
+        localStorage.setItem('token', accessToken);
+        setUser(userFinal);
+      }
+    } catch (error: any) {
+      const message = error.response?.data?.message || 'Login failed';
+      throw new Error(message);
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+  };
+
+  const value = { user, loading, login, register, logout };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within AuthProvider');
   }
   return context;
-};
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
-  }, []);
-
-  const getUsers = (): StoredUser[] => {
-    const users = localStorage.getItem('users');
-    return users ? JSON.parse(users) : [];
-  };
-
-  const saveUsers = (users: StoredUser[]) => {
-    localStorage.setItem('users', JSON.stringify(users));
-  };
-
-  const register = async (name: string, email: string, password: string): Promise<void> => {
-    const users = getUsers();
-    if (users.find(u => u.email === email)) {
-      throw new Error('User already exists with this email');
-    }
-
-    const newUser: StoredUser = {
-      id: Date.now().toString(),
-      name,
-      email,
-      password,
-    };
-    users.push(newUser);
-    saveUsers(users);
-
-    const { password: _, ...userWithoutPassword } = newUser;
-    setUser(userWithoutPassword);
-    localStorage.setItem('user', JSON.stringify(userWithoutPassword));
-  };
-
-  const login = async (email: string, password: string): Promise<void> => {
-    const users = getUsers();
-    const foundUser = users.find(u => u.email === email && u.password === password);
-    if (!foundUser) {
-      throw new Error('Invalid email or password');
-    }
-    const { password: _, ...userWithoutPassword } = foundUser;
-    setUser(userWithoutPassword);
-    localStorage.setItem('user', JSON.stringify(userWithoutPassword));
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('user');
-  };
-
-  const value: AuthContextType = { user, loading, login, register, logout };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
