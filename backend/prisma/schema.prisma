@@ -33,7 +33,7 @@ model Course {
 model Module {
   id       String @id @default(uuid())
   title    String
-  content   String
+  content  String @db.LongText
   courseId String
   course   Course @relation(fields: [courseId], references: [id])
   order    Int
