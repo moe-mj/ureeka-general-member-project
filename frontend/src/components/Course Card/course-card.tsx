@@ -3,18 +3,19 @@ interface CardProps {
   lesson: string;
   status: number;
   image: string;
+  onContinue?: () => void;   
 }
 
-function Card({ title, lesson, status, image }: CardProps) {
+function Card({ title, lesson, status, image, onContinue }: CardProps) {
   return (
     <div className="course-card">
       <div className="course-card-top">
         <div className="course-card-icon">
-            <img src={image} alt="" />
+          <img src={image} alt="" />
         </div>
         <div className="course-info">
           <h3>{title}</h3>
-          <p>Materi hari ini: <span>{lesson}</span></p>
+          <p>Description: <span>{lesson}</span></p>
         </div>
       </div>
 
@@ -24,14 +25,16 @@ function Card({ title, lesson, status, image }: CardProps) {
           <span className="status-text">{status}%</span>
         </div>
         <div className="course-progress-bar">
-          <div 
-            className="progress-fill" 
+          <div
+            className="progress-fill"
             style={{ width: `${status}%` }}
           ></div>
         </div>
       </div>
 
-      <button className="btn-course-continue">Continue Lesson</button>
+      <button className="btn-course-continue" onClick={onContinue}>
+        Continue Lesson
+      </button>
     </div>
   );
 }

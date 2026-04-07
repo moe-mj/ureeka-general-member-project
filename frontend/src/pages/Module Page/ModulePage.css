@@ -1,0 +1,49 @@
+.module-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: 24px;
+  color: var(--text-main);
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+.module-back-btn {
+  background: none;
+  border: none;
+  color: var(--primary-accent);
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 0;
+}
+
+.module-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.5px;
+}
+
+.module-content {
+  line-height: 1.7;
+}
+
+.module-content img {
+  max-width: 100%;
+  border-radius: 12px;
+}
+
+.module-content pre {
+  background: #0f172a;
+  padding: 1rem;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.module-content code {
+  font-family: "Fira Code", monospace;
+}
+
+.katex {
+  font-size: 1.1em;
+}

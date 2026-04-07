@@ -1,15 +1,8 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { LearningService } from './learning.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../jwt/jwt-auth.guard'; // Sesuaikan path-nya jika beda folder
-import { CreateLearningDto } from './dto/learning.dto'; // Import DTO dari file terpisah
+import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
+import { CreateLearningDto } from './dto/learning.dto';
 
 @ApiTags('Learning')
 @ApiBearerAuth()

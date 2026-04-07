@@ -1,9 +1,9 @@
-import { 
-  Injectable, 
+import {
+  Injectable,
   NotFoundException,
-  BadRequestException
+  BadRequestException,
 } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service'; 
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class LearningService {
@@ -12,8 +12,8 @@ export class LearningService {
   async getAllCourses() {
     return await this.prisma.course.findMany({
       orderBy: {
-        createdAt: 'desc' 
-      }
+        createdAt: 'desc',
+      },
     });
   }
 
@@ -23,7 +23,9 @@ export class LearningService {
     });
 
     if (!course) {
-      throw new NotFoundException(`Course dengan ID ${courseId} nggak ditemukan!`);
+      throw new NotFoundException(
+        `Course dengan ID ${courseId} nggak ditemukan!`,
+      );
     }
 
     return course;
@@ -57,12 +59,14 @@ export class LearningService {
     });
 
     if (!course) {
-      throw new NotFoundException(`Course dengan ID ${courseId} nggak ditemukan!`);
+      throw new NotFoundException(
+        `Course dengan ID ${courseId} nggak ditemukan!`,
+      );
     }
 
     return await this.prisma.module.findMany({
       where: { courseId: courseId },
-      orderBy: { order: 'asc' }, 
+      orderBy: { order: 'asc' },
     });
   }
 
@@ -72,7 +76,9 @@ export class LearningService {
     });
 
     if (!moduleItem) {
-      throw new NotFoundException(`Modul dengan ID ${moduleId} nggak ditemukan!`);
+      throw new NotFoundException(
+        `Modul dengan ID ${moduleId} nggak ditemukan!`,
+      );
     }
 
     return moduleItem;
