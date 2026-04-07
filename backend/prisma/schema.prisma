@@ -44,4 +44,6 @@ model UserProgress {
   userId      String
   moduleId    String
   isCompleted Boolean @default(false)
+
+  @@unique([userId, moduleId])
 }

@@ -59,10 +59,8 @@ function Dashboard() {
     navigate('/');
   };
 
-  // Dashboard.tsx (tambahkan di dalam komponen)
   const handleContinue = async (courseId: string) => {
     try {
-      // Ambil daftar module berdasarkan courseId
       const modulesRes = await api.get(`/api/learning/${courseId}/modules`);
       const modules = modulesRes.data;
 
@@ -71,9 +69,7 @@ function Dashboard() {
         return;
       }
 
-      // Ambil module pertama (diurutkan berdasarkan field 'order' dari backend)
       const firstModule = modules[0];
-      // Navigasi ke halaman module
       navigate(`/module/${firstModule.id}`);
     } catch (error) {
       console.error('Gagal mengambil module:', error);
