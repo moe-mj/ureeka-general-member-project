@@ -1,3 +1,12 @@
+:root {
+  --primary-accent: #8b5cf6;
+  --bg-dark: #0f172a;
+  --card-bg: #1e293b;
+  --text-main: #f8fafc;
+  --text-dim: #94a3b8;
+  --card-border: rgba(255, 255, 255, 0.08);
+}
+
 .module-layout {
   display: flex;
   min-height: 100vh;
@@ -107,8 +116,13 @@
 }
 
 .module-title {
+  color: var(--text-main);
   font-size: 2rem;
   margin-bottom: 1.5rem;
+}
+
+.module-markdown h2{
+  color: var(--text-main);
 }
 
 .module-list {
@@ -116,6 +130,45 @@
 }
 .module-markdown {
   line-height: 1.7;
+  position: relative; 
+}
+
+.ask-ai-popup {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 10px)); 
+  background-color: var(--primary-accent);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.ask-ai-popup:hover {
+  background-color: #7c3aed;
+}
+
+.ask-ai-popup::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: var(--primary-accent) transparent transparent transparent;
+}
+
+.ask-ai-popup:hover::after {
+  border-color: #7c3aed transparent transparent transparent;
 }
 
 @media (max-width: 768px) {
@@ -130,5 +183,138 @@
   .module-content-area {
     max-width: 100%;
     padding: 1rem;
+  }
+}
+
+.ai-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; 
+  backdrop-filter: blur(3px); 
+}
+
+.ai-modal-content {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px; 
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.ai-modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: white;
+}
+
+.ai-question-input {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  min-height: 100px;
+  margin-bottom: 1.5rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.ai-question-input:focus {
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
+.ai-modal-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.ai-modal-buttons button {
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.ai-modal-buttons button:first-child {
+  background-color: var(--primary-accent);
+  color: white;
+}
+
+.ai-modal-buttons button:first-child:hover:not(:disabled) {
+  background-color: #7c3aed; 
+}
+
+.ai-modal-buttons button:first-child:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ai-modal-buttons button:last-child {
+  background-color: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--card-border);
+}
+
+.ai-modal-buttons button:last-child:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.ai-loading {
+  margin-top: 1rem;
+  color: var(--primary-accent);
+  font-size: 0.9rem;
+  text-align: center;
+  font-style: italic;
+}
+
+.ai-response {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: rgba(139, 92, 246, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-accent);
+}
+
+.ai-response strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--primary-accent);
+}
+
+.ai-response p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

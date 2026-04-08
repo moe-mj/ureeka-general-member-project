@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
@@ -25,6 +25,17 @@ function ModulePage() {
     const [error, setError] = useState('');
     const [completing, setCompleting] = useState(false);
 
+    const [showPopup, setShowPopup] = useState(false);
+    const [selectedText, setSelectedText] = useState('');
+    const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
+    const contentRef = useRef<HTMLDivElement>(null);
+    const popupRef = useRef<HTMLButtonElement>(null);
+
+    const [showAIModal, setShowAIModal] = useState(false);
+    const [userQuestion, setUserQuestion] = useState('');
+    const [aiResponse, setAiResponse] = useState('');
+    const [loadingAI, setLoadingAI] = useState(false);
+
     useEffect(() => {
         const fetchData = async () => {
             if (!moduleId) {
@@ -40,7 +51,6 @@ function ModulePage() {
                 const modulesRes = await api.get(`/api/learning/${current.courseId}/modules`);
                 let modules = modulesRes.data;
 
-                // Ambil progress user untuk course ini
                 try {
                     const progressRes = await api.get(`/api/progress/course/${current.courseId}`);
                     const progressMap = new Map();
@@ -67,6 +77,98 @@ function ModulePage() {
         };
         fetchData();
     }, [moduleId]);
+
+    useEffect(() => {
+        const handleSelection = () => {
+            const selection = window.getSelection();
+            if (!selection || selection.isCollapsed || !contentRef.current) {
+                setShowPopup(false);
+                return;
+            }
+
+            const text = selection.toString().trim();
+            if (text.length === 0) {
+                setShowPopup(false);
+                return;
+            }
+
+            let container = selection.anchorNode;
+            let insideContent = false;
+            while (container) {
+                if (container === contentRef.current) {
+                    insideContent = true;
+                    break;
+                }
+                container = container.parentElement;
+            }
+            if (!insideContent) {
+                setShowPopup(false);
+                return;
+            }
+
+            const range = selection.getRangeAt(0);
+            const rect = range.getBoundingClientRect();
+            
+            const x = rect.left + (rect.width / 2) + window.scrollX;
+            const y = rect.top + window.scrollY;
+
+            setSelectedText(text);
+            setPopupPosition({ x, y });
+            setShowPopup(true);
+        };
+
+        const handleClickOutside = (event: MouseEvent) => {
+            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+                setShowPopup(false);
+            }
+        };
+
+        document.addEventListener('mouseup', handleSelection);
+        document.addEventListener('mousedown', handleClickOutside);
+        
+        window.addEventListener('scroll', () => setShowPopup(false));
+
+        return () => {
+            document.removeEventListener('mouseup', handleSelection);
+            document.removeEventListener('mousedown', handleClickOutside);
+            window.removeEventListener('scroll', () => setShowPopup(false));
+        };
+    }, []);
+
+    const handleAskAI = (e: React.MouseEvent) => {
+        e.preventDefault(); 
+        setShowPopup(false);
+        setUserQuestion(selectedText);
+        setAiResponse('');
+        setShowAIModal(true);
+    };
+
+    const sendToAI = async () => {
+        if (!userQuestion.trim() || !moduleId) return; 
+        
+        setLoadingAI(true);
+        setAiResponse('');
+
+        try {
+            const response = await api.post('/api/ai/ask', {
+                prompt: userQuestion,
+                moduleId: moduleId
+            });
+            const answer = response.data?.answer || response.data?.response || response.data;
+            
+            if (typeof answer === 'string') {
+                setAiResponse(answer);
+            } else {
+                setAiResponse(JSON.stringify(answer));
+            }
+
+        } catch (err) {
+            console.error('Gagal memanggil AI:', err);
+            setAiResponse('Terjadi kesalahan saat menghubungi server AI. Silakan coba lagi.');
+        } finally {
+            setLoadingAI(false);
+        }
+    };
 
     const handleMarkComplete = async () => {
         if (!currentModule) return;
@@ -124,12 +226,54 @@ function ModulePage() {
                     </button>
                 </div>
                 <h1 className="module-title">{currentModule.title}</h1>
-                <div className="module-markdown">
+                <div className="module-markdown" ref={contentRef}>
                     <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                         {currentModule.content}
                     </ReactMarkdown>
                 </div>
             </main>
+
+            {}
+            {showPopup && (
+                <button
+                    ref={popupRef}
+                    className="ask-ai-popup"
+                    style={{ top: popupPosition.y, left: popupPosition.x }}
+                    onMouseDown={(e) => e.preventDefault()} 
+                    onClick={handleAskAI}
+                >
+                    🤖 Ask Acel
+                </button>
+            )}
+
+            {}
+            {showAIModal && (
+                <div className="ai-modal-overlay" onClick={() => setShowAIModal(false)}>
+                    <div className="ai-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <h3>Tanya AI tentang teks yang dipilih</h3>
+                        <textarea
+                            className="ai-question-input"
+                            value={userQuestion}
+                            onChange={(e) => setUserQuestion(e.target.value)}
+                            placeholder="Tanyakan lebih lanjut tentang teks ini..."
+                            rows={3}
+                        />
+                        <div className="ai-modal-buttons">
+                            <button onClick={sendToAI} disabled={loadingAI}>
+                                {loadingAI ? 'Mengirim...' : 'Kirim ke AI'}
+                            </button>
+                            <button onClick={() => setShowAIModal(false)}>Tutup</button>
+                        </div>
+                        {loadingAI && <div className="ai-loading">Menunggu respons AI...</div>}
+                        {aiResponse && (
+                            <div className="ai-response">
+                                <strong>Respons AI:</strong>
+                                <p>{aiResponse}</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
