@@ -205,7 +205,11 @@
   padding: 2rem;
   border-radius: 12px;
   width: 90%;
-  max-width: 500px; 
+  max-width: 600px; 
+  
+  max-height: 85vh; 
+  overflow-y: auto; 
+  
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
   border: 1px solid var(--card-border);
   color: var(--text-main);
@@ -295,6 +299,9 @@
   background-color: rgba(139, 92, 246, 0.1);
   border-radius: 8px;
   border-left: 4px solid var(--primary-accent);
+  
+  max-height: 40vh; 
+  overflow-y: auto; 
 }
 
 .ai-response strong {

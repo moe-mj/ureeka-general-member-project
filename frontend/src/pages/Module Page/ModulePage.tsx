@@ -46,7 +46,6 @@ function ModulePage() {
             try {
                 const moduleRes = await api.get(`/api/learning/module/${moduleId}`);
                 const current = moduleRes.data;
-                setCurrentModule(current);
 
                 const modulesRes = await api.get(`/api/learning/${current.courseId}/modules`);
                 let modules = modulesRes.data;
@@ -54,6 +53,7 @@ function ModulePage() {
                 try {
                     const progressRes = await api.get(`/api/progress/course/${current.courseId}`);
                     const progressMap = new Map();
+                    
                     if (Array.isArray(progressRes.data)) {
                         progressRes.data.forEach((p: any) => {
                             progressMap.set(p.moduleId, p.isCompleted);
@@ -63,11 +63,13 @@ function ModulePage() {
                         ...m,
                         isCompleted: progressMap.get(m.id) || false,
                     }));
+                    current.isCompleted = progressMap.get(current.id) || false;
                 } catch (err) {
                     console.warn('Progress API belum tersedia, lanjutkan tanpa status completed');
                 }
-
+                setCurrentModule(current);
                 setAllModules(modules);
+                
             } catch (err) {
                 console.error(err);
                 setError('Gagal memuat modul.');
@@ -268,7 +270,11 @@ function ModulePage() {
                         {aiResponse && (
                             <div className="ai-response">
                                 <strong>Respons AI:</strong>
-                                <p>{aiResponse}</p>
+                                <div style={{ marginTop: '0.5rem', lineHeight: '1.6' }}>
+                                    <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                                        {aiResponse}
+                                    </ReactMarkdown>
+                                </div>
                             </div>
                         )}
                     </div>
