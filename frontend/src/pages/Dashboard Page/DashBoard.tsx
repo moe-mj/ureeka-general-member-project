@@ -25,6 +25,7 @@ function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [progressPercent, setProgressPercent] = useState<Record<string, number>>({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +53,40 @@ function Dashboard() {
 
     fetchData();
   }, [logout, navigate]);
+
+  useEffect(() => {
+    const fetchProgressForCourses = async () => {
+      if (courses.length === 0) {
+        return;
+      }
+      const progressMap: Record<string, number> = {};
+
+      const promises = courses.map(async (course) => {
+        try {
+          const modulesRes = await api.get(`/api/learning/${course.id}/modules`);
+          const modules = modulesRes.data;
+          const totalModules = modules.length;
+          if (totalModules === 0) {
+            progressMap[course.id] = 0;
+            return;
+          }   
+
+          const progressRes = await api.get(`/api/progress/course/${course.id}`);
+          const completedModules = progressRes.data.filter((p: any) => p.isCompleted).length;
+          const percent = Math.round((completedModules / totalModules) * 100);
+          progressMap[course.id] = percent;
+        } catch (err) {
+          console.error(`Error fetching progress for course ${course.id}`, err);
+          progressMap[course.id] = 0;
+        }
+      });
+
+      await Promise.all(promises);
+      setProgressPercent(progressMap);
+    };
+
+    fetchProgressForCourses();
+  }, [courses]);
 
   const handleLogOut = () => {
     localStorage.removeItem('token');
@@ -120,7 +155,7 @@ function Dashboard() {
               key={course.id}
               title={course.title}
               lesson={course.description}
-              status={0}
+              status={progressPercent[course.id] ?? 0}
               image={`https://placehold.co/48x48/8b5cf6/white?text=${course.title.charAt(0)}`}
               onContinue={() => handleContinue(course.id)}
             />
