@@ -91,5 +91,8 @@
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
+  },
+  "overrides": {
+    "@hono/node-server": ">=1.19.13"
   }
 }

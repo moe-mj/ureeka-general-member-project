@@ -37,8 +37,6 @@ function ModulePage() {
     const popupRef = useRef<HTMLButtonElement>(null);
 
     const [showAIModal, setShowAIModal] = useState(false);
-    const [userQuestion, setUserQuestion] = useState('');
-    const [aiResponse, setAiResponse] = useState('');
     const [loadingAI, setLoadingAI] = useState(false);
 
     const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -149,8 +147,6 @@ function ModulePage() {
     const handleAskAI = (e: React.MouseEvent) => {
         e.preventDefault();
         setShowPopup(false);
-        setUserQuestion(selectedText);
-        setAiResponse('');
 
         const initialMessage = `Saya mau bertanya tentang bagian ini: ${selectedText}`;
         setMessages([{
@@ -323,7 +319,7 @@ function ModulePage() {
                                         e.preventDefault();
                                         handleSendMessage();
                                     }
-                                    else if (e.key === 'Escape'){
+                                    else if (e.key === 'Escape') {
                                         e.preventDefault();
                                         setShowAIModal(false);
                                     }
