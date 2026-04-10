@@ -1,4 +1,4 @@
-import './Dashboard.css';
+import './DashBoard.css';
 import Card from '../../components/Course Card/course-card';
 import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
