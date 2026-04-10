@@ -232,7 +232,14 @@ function ModulePage() {
         navigate(`/module/${module.id}`);
     };
 
-    if (loading) return <div className="module-loading"><h1 id = "loadingz">Loading Module..</h1></div>;
+    const handleGenerateQuiz = () => {
+        const quizPrompt = "Berdasarkan materi yang sedang saya pelajari ini, buatkan satu soal tantangan (pilihan ganda atau isian) untuk mengetes pemahaman saya. Jangan berikan jawabannya sampai saya berhasil menjawabnya"
+        setMessages([{ role: 'user', content: quizPrompt }]);
+        setShowAIModal(true);
+        processChat(quizPrompt, []);
+    }
+
+    if (loading) return <div className="module-loading"><h1 id="loadingz">Loading Module..</h1></div>;
     if (error) return <div className="module-error">{error}</div>;
     if (!currentModule) return <div className="module-error">Modul tidak ditemukan.</div>;
 
@@ -271,6 +278,19 @@ function ModulePage() {
                     <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                         {currentModule.content}
                     </ReactMarkdown>
+                </div>
+                <div className="module-markdown" ref={contentRef}>
+                    <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                        {currentModule.content}
+                    </ReactMarkdown>
+
+                    <div className="quiz-trigger-area">
+                        <hr />
+                        <p>Sudah paham materinya? Coba tes kemampuanmu!</p>
+                        <button className="quiz-btn" onClick={handleGenerateQuiz}>
+                            Generate Quiz
+                        </button>
+                    </div>
                 </div>
             </main>
 
