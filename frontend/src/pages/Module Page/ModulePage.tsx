@@ -232,7 +232,7 @@ function ModulePage() {
         navigate(`/module/${module.id}`);
     };
 
-    if (loading) return <div className="module-loading">Memuat modul...</div>;
+    if (loading) return <div className="module-loading"><h1 id = "loadingz">Loading Module..</h1></div>;
     if (error) return <div className="module-error">{error}</div>;
     if (!currentModule) return <div className="module-error">Modul tidak ditemukan.</div>;
 

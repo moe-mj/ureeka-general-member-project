@@ -115,7 +115,7 @@ function Dashboard() {
   if (loading) {
     return (
       <div className="dashboard-wrapper" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <h2 style={{ color: 'var(--text-dim)' }}>Loading dashboard</h2>
+        <h2 style={{ color: 'var(--text-dim)', fontFamily: "Bitcount Grid Double"}}>Loading Dashboard..</h2>
       </div>
     );
   }
@@ -137,8 +137,10 @@ function Dashboard() {
         <div className="header-content">
           <h1>
             Hai, {user?.name}! <br />
-            Learning is fun with AI
           </h1>
+          <h2 id = "mokonz">
+            Learning is fun with AI
+          </h2>
           <p className="subtitle">
             Keep up the great work! Here is your progress.
           </p>
