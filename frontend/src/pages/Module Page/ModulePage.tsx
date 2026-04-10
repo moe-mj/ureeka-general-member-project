@@ -16,6 +16,11 @@ interface Module {
     isCompleted?: boolean;
 }
 
+interface ChatMessage {
+    role: 'user' | 'ai';
+    content: string;
+}
+
 function ModulePage() {
     const { moduleId } = useParams<{ moduleId: string }>();
     const navigate = useNavigate();
@@ -36,6 +41,10 @@ function ModulePage() {
     const [aiResponse, setAiResponse] = useState('');
     const [loadingAI, setLoadingAI] = useState(false);
 
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [inputValue, setInputValue] = useState('');
+    const chatEnd = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         const fetchData = async () => {
             if (!moduleId) {
@@ -53,7 +62,7 @@ function ModulePage() {
                 try {
                     const progressRes = await api.get(`/api/progress/course/${current.courseId}`);
                     const progressMap = new Map();
-                    
+
                     if (Array.isArray(progressRes.data)) {
                         progressRes.data.forEach((p: any) => {
                             progressMap.set(p.moduleId, p.isCompleted);
@@ -69,7 +78,7 @@ function ModulePage() {
                 }
                 setCurrentModule(current);
                 setAllModules(modules);
-                
+
             } catch (err) {
                 console.error(err);
                 setError('Gagal memuat modul.');
@@ -110,7 +119,7 @@ function ModulePage() {
 
             const range = selection.getRangeAt(0);
             const rect = range.getBoundingClientRect();
-            
+
             const x = rect.left + (rect.width / 2) + window.scrollX;
             const y = rect.top + window.scrollY;
 
@@ -127,7 +136,7 @@ function ModulePage() {
 
         document.addEventListener('mouseup', handleSelection);
         document.addEventListener('mousedown', handleClickOutside);
-        
+
         window.addEventListener('scroll', () => setShowPopup(false));
 
         return () => {
@@ -138,39 +147,73 @@ function ModulePage() {
     }, []);
 
     const handleAskAI = (e: React.MouseEvent) => {
-        e.preventDefault(); 
+        e.preventDefault();
         setShowPopup(false);
         setUserQuestion(selectedText);
         setAiResponse('');
+
+        const initialMessage = `Saya mau bertanya tentang bagian ini: ${selectedText}`;
+        setMessages([{
+            role: 'user', content: initialMessage
+        }]);
+
         setShowAIModal(true);
+        processChat(initialMessage, []);
     };
 
-    const sendToAI = async () => {
-        if (!userQuestion.trim() || !moduleId) return; 
-        
+    const processChat = async (prompt: string, history: ChatMessage[]) => {
+        if (!prompt.trim() || !moduleId) return;
+
         setLoadingAI(true);
-        setAiResponse('');
 
         try {
+            const contextHistory = history.map(m =>
+                `${m.role === 'user' ? 'User' : 'AI'}: ${m.content}`
+            ).join('\n');
+
+            const finalPrompt = history.length > 0
+                ? `Ini adalah kelanjutan percakapan kita:\n${contextHistory}\nUser baru saja bertanya: ${prompt}`
+                : prompt;
+
             const response = await api.post('/api/ai/ask', {
-                prompt: userQuestion,
+                prompt: finalPrompt,
                 moduleId: moduleId
             });
+
             const answer = response.data?.answer || response.data?.response || response.data;
-            
-            if (typeof answer === 'string') {
-                setAiResponse(answer);
-            } else {
-                setAiResponse(JSON.stringify(answer));
-            }
+
+            setMessages(prev => [...prev, {
+                role: 'ai',
+                content: typeof answer === 'string' ? answer : JSON.stringify(answer)
+            }]);
 
         } catch (err) {
-            console.error('Gagal memanggil AI:', err);
-            setAiResponse('Terjadi kesalahan saat menghubungi server AI. Silakan coba lagi.');
+            setMessages(prev => [...prev, {
+                role: 'ai',
+                content: 'Maaf, Acel sedang gangguan koneksi. Coba tanya lagi ya!'
+            }]);
         } finally {
             setLoadingAI(false);
         }
     };
+
+    const handleSendMessage = () => {
+        if (!inputValue.trim() || loadingAI) return;
+
+        const newUserMsg = inputValue;
+        setMessages(prev => [...prev, { role: 'user', content: newUserMsg }]);
+        setInputValue('');
+
+        processChat(newUserMsg, messages);
+    };
+
+    const scrollToBottom = () => {
+        chatEnd.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     const handleMarkComplete = async () => {
         if (!currentModule) return;
@@ -235,48 +278,61 @@ function ModulePage() {
                 </div>
             </main>
 
-            {}
+            { }
             {showPopup && (
                 <button
                     ref={popupRef}
                     className="ask-ai-popup"
                     style={{ top: popupPosition.y, left: popupPosition.x }}
-                    onMouseDown={(e) => e.preventDefault()} 
+                    onMouseDown={(e) => e.preventDefault()}
                     onClick={handleAskAI}
                 >
                     🤖 Ask Acel
                 </button>
             )}
 
-            {}
+            { }
             {showAIModal && (
                 <div className="ai-modal-overlay" onClick={() => setShowAIModal(false)}>
-                    <div className="ai-modal-content" onClick={(e) => e.stopPropagation()}>
-                        <h3>Tanya AI tentang teks yang dipilih</h3>
-                        <textarea
-                            className="ai-question-input"
-                            value={userQuestion}
-                            onChange={(e) => setUserQuestion(e.target.value)}
-                            placeholder="Tanyakan lebih lanjut tentang teks ini..."
-                            rows={3}
-                        />
-                        <div className="ai-modal-buttons">
-                            <button onClick={sendToAI} disabled={loadingAI}>
-                                {loadingAI ? 'Mengirim...' : 'Kirim ke AI'}
-                            </button>
-                            <button onClick={() => setShowAIModal(false)}>Tutup</button>
+                    <div className="ai-modal-content chat-mode" onClick={(e) => e.stopPropagation()}>
+                        <div className="ai-modal-header">
+                            <h3>Tanya Acel</h3>
+                            <button className="close-x" onClick={() => setShowAIModal(false)}>x</button>
                         </div>
-                        {loadingAI && <div className="ai-loading">Menunggu respons AI...</div>}
-                        {aiResponse && (
-                            <div className="ai-response">
-                                <strong>Respons AI:</strong>
-                                <div style={{ marginTop: '0.5rem', lineHeight: '1.6' }}>
+
+                        <div className="chat-container">
+                            {messages.map((msg, index) => (
+                                <div key={index} className={`chat-bubble ${msg.role}`}>
+                                    <strong>{msg.role === 'user' ? 'Kamu' : 'Acel'}:</strong>
                                     <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                                        {aiResponse}
+                                        {msg.content}
                                     </ReactMarkdown>
                                 </div>
-                            </div>
-                        )}
+                            ))}
+                            {loadingAI && <div className="chat-bubble ai loading">Acel sedang berpikir...</div>}
+                            <div ref={chatEnd} />
+                        </div>
+
+                        <div className="chat-input-area">
+                            <textarea
+                                value={inputValue}
+                                onChange={(e) => setInputValue(e.target.value)}
+                                placeholder="Tanya balik ke Acel..."
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handleSendMessage();
+                                    }
+                                    else if (e.key === 'Escape'){
+                                        e.preventDefault();
+                                        setShowAIModal(false);
+                                    }
+                                }}
+                            />
+                            <button onClick={handleSendMessage} disabled={loadingAI}>
+                                Kirim
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
