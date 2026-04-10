@@ -7,6 +7,17 @@
   --card-border: rgba(255, 255, 255, 0.08);
 }
 
+.module-loading{
+  display: flex;
+  justify-content: center; /* Tengah secara horizontal */
+  align-items: center;     /* Tengah secara vertikal */
+  height: 100vh;           /* Mengambil tinggi penuh layar browser */
+}
+
+#loadingz{
+    font-family: "Bitcount Grid Double", system-ui;
+  margin: 0;
+}
 .module-layout {
   display: flex;
   min-height: 100vh;
