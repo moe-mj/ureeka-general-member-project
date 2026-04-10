@@ -29,6 +29,7 @@ function ModulePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [completing, setCompleting] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const [showPopup, setShowPopup] = useState(false);
     const [selectedText, setSelectedText] = useState('');
@@ -127,6 +128,10 @@ function ModulePage() {
         };
 
         const handleClickOutside = (event: MouseEvent) => {
+            const selection = window.getSelection();
+            if (selection && !selection.isCollapsed && selection.toString().trim().length > 0) {
+                return;
+            }
             if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
                 setShowPopup(false);
             }
@@ -246,19 +251,37 @@ function ModulePage() {
     return (
         <div className="module-layout">
             <aside className="module-sidebar">
-                <h3>Daftar Modul</h3>
-                <ul className="module-list">
-                    {allModules.map((module) => (
-                        <li
-                            key={module.id}
-                            className={`module-item ${module.id === currentModule.id ? 'active' : ''} ${module.isCompleted ? 'completed' : ''}`}
-                            onClick={() => handleSelectModule(module)}
-                        >
-                            <span className="module-list">{module.title}</span>
-                            {module.isCompleted && <span className="checkmark">✓</span>}
-                        </li>
-                    ))}
-                </ul>
+                <button
+                    className="mobile-sidebar-toggle"
+                    onClick={() => setSidebarOpen(prev => !prev)}
+                >
+                    <span className="mobile-sidebar-toggle-left">
+                        Daftar Modul
+                    </span>
+                    <span className="mobile-sidebar-toggle-right">
+                        <span className="active-module-name">{currentModule?.title}</span>
+                        <span className={`mobile-toggle-arrow ${sidebarOpen ? 'open' : ''}`}>▼</span>
+                    </span>
+                </button>
+
+                <div className={`module-list-dropdown ${sidebarOpen ? '' : 'hidden'}`}>
+                    <h3>Daftar Modul</h3>
+                    <ul className="module-list">
+                        {allModules.map((module) => (
+                            <li
+                                key={module.id}
+                                className={`module-item ${module.id === currentModule?.id ? 'active' : ''} ${module.isCompleted ? 'completed' : ''}`}
+                                onClick={() => {
+                                    handleSelectModule(module);
+                                    setSidebarOpen(false);
+                                }}
+                            >
+                                <span className="module-list">{module.title}</span>
+                                {module.isCompleted && <span className="checkmark">✓</span>}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </aside>
             <main className="module-content-area">
                 <div className="module-header">
@@ -279,18 +302,12 @@ function ModulePage() {
                         {currentModule.content}
                     </ReactMarkdown>
                 </div>
-                <div className="module-markdown" ref={contentRef}>
-                    <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                        {currentModule.content}
-                    </ReactMarkdown>
-
-                    <div className="quiz-trigger-area">
-                        <hr />
-                        <p>Sudah paham materinya? Coba tes kemampuanmu!</p>
-                        <button className="quiz-btn" onClick={handleGenerateQuiz}>
-                            Generate Quiz
-                        </button>
-                    </div>
+                <div className="quiz-trigger-area">
+                    <hr />
+                    <p>Sudah paham materinya? Coba tes kemampuanmu!</p>
+                    <button className="quiz-btn" onClick={handleGenerateQuiz}>
+                        Generate Quiz
+                    </button>
                 </div>
             </main>
 
