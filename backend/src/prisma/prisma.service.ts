@@ -12,6 +12,10 @@ export class PrismaService extends PrismaClient {
       database: process.env.DATABASE_NAME,
       port: Number(process.env.DATABASE_PORT),
       connectionLimit: 5,
+      ssl: {
+        minVersion: 'TLSv1.2',
+        rejectUnauthorized: false,
+      },
     });
     super({ adapter });
   }
