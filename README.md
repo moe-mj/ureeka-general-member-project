@@ -88,8 +88,10 @@ The core intelligence of AcelAcademy lies in its **Context-Injection** layer. Ev
 
 This project is deployment-ready:
 
-- **Frontend & Backend**: Hosted on [Railway](https://acel-academy.up.railway.app/).
-- **Database**: Hosted on [TiDB](https://www.pingcap.com/).
+- **Live site**: [acel-academy.vercel.app](https://acel-academy.vercel.app/)
+- **Frontend**: Hosted on [Vercel](https://vercel.com/) (`frontend/`, SPA rewrites in `frontend/vercel.json`).
+- **Backend API**: Hosted on Vercel at [acel-academy-api.vercel.app](https://acel-academy-api.vercel.app/api) (`backend/`, NestJS preset).
+- **Database**: Hosted on [TiDB Cloud Starter](https://www.pingcap.com/) (free tier, Singapore).
 
 ---
 
