@@ -26,13 +26,12 @@ export default defineConfig([
         ],
         tsconfigRootDir: import.meta.dirname,
       },
-      rules: {
-        ...reactHooks.configs.recommended.rules,
-        "react-refresh/only-export-components": [
-          "warn",
-          { allowConstantExport: true },
-        ],
-      },
+    },
+    rules: {
+      "react-refresh/only-export-components": [
+        "warn",
+        { allowConstantExport: true },
+      ],
     },
   },
 ]);
