@@ -45,7 +45,13 @@ function ModulePage() {
     const chatEnd = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        let cancelled = false;
         const fetchData = async () => {
+            setLoading(true);
+            setError('');
+            setShowAIModal(false);
+            setMessages([]);
+            setInputValue('');
             if (!moduleId) {
                 setError('Module ID tidak valid');
                 setLoading(false);
@@ -75,17 +81,22 @@ function ModulePage() {
                 } catch (err) {
                     console.warn('Progress API belum tersedia, lanjutkan tanpa status completed');
                 }
+                if (cancelled) return;
                 setCurrentModule(current);
                 setAllModules(modules);
 
             } catch (err) {
+                if (cancelled) return;
                 console.error(err);
                 setError('Gagal memuat modul.');
             } finally {
-                setLoading(false);
+                if (!cancelled) setLoading(false);
             }
         };
         fetchData();
+        return () => {
+            cancelled = true;
+        };
     }, [moduleId]);
 
     useEffect(() => {
@@ -140,12 +151,13 @@ function ModulePage() {
         document.addEventListener('mouseup', handleSelection);
         document.addEventListener('mousedown', handleClickOutside);
 
-        window.addEventListener('scroll', () => setShowPopup(false));
+        const handleScroll = () => setShowPopup(false);
+        window.addEventListener('scroll', handleScroll);
 
         return () => {
             document.removeEventListener('mouseup', handleSelection);
             document.removeEventListener('mousedown', handleClickOutside);
-            window.removeEventListener('scroll', () => setShowPopup(false));
+            window.removeEventListener('scroll', handleScroll);
         };
     }, []);
 
